@@ -1,0 +1,16 @@
+apiVersion: 1
+
+datasources:
+  - name: SmartScale Postgres
+    uid: smartscale-postgres
+    type: postgres
+    access: proxy
+    url: db:5432
+    database: smartscale
+    user: smartscale
+    secureJsonData:
+      password: smartscale
+    jsonData:
+      sslmode: disable
+      postgresVersion: 1500
+      timescaledb: false

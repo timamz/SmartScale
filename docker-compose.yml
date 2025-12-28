@@ -1,0 +1,98 @@
+version: "3.9"
+
+services:
+  db:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: smartscale
+      POSTGRES_USER: smartscale
+      POSTGRES_PASSWORD: smartscale
+    ports:
+      - "5432:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+
+  broker:
+    image: rabbitmq:3-management
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+
+  api:
+    build:
+      context: ./api
+    environment:
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_NAME: smartscale
+      DB_USER: smartscale
+      DB_PASSWORD: smartscale
+      CELERY_BROKER_URL: amqp://guest:guest@broker:5672//
+      IMAGE_STORAGE_PATH: /data/images
+      CONFIDENCE_THRESHOLD: 0.55
+      ADMIN_TOKEN: changeme
+      MODEL_ID: Adriana213/vgg16-fruit-classifier
+      MODEL_REVISION: main
+      LOG_PATH: /logs/api.jsonl
+    volumes:
+      - ./data/images:/data/images
+      - ./logs:/logs
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+      - broker
+
+  worker:
+    build:
+      context: ./worker
+    environment:
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_NAME: smartscale
+      DB_USER: smartscale
+      DB_PASSWORD: smartscale
+      CELERY_BROKER_URL: amqp://guest:guest@broker:5672//
+      IMAGE_STORAGE_PATH: /data/images
+      CONFIDENCE_THRESHOLD: 0.55
+      DEFAULT_PRICE_PER_KG: 2.99
+      MODEL_ID: Adriana213/vgg16-fruit-classifier
+      MODEL_REVISION: main
+      HF_HOME: /models/hf
+      LOG_PATH: /logs/worker.jsonl
+    volumes:
+      - ./data/images:/data/images
+      - ./model_cache:/models/hf
+      - ./logs:/logs
+    depends_on:
+      - db
+      - broker
+
+  ui:
+    build:
+      context: ./ui
+    environment:
+      API_BASE_URL: http://api:8000/v1
+      CONFIDENCE_THRESHOLD: 0.55
+    ports:
+      - "8501:8501"
+    depends_on:
+      - api
+
+  grafana:
+    image: grafana/grafana:10.2.3
+    environment:
+      GF_SECURITY_ADMIN_USER: admin
+      GF_SECURITY_ADMIN_PASSWORD: admin
+      GF_USERS_ALLOW_SIGN_UP: "false"
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./grafana/provisioning:/etc/grafana/provisioning
+      - ./grafana/dashboards:/var/lib/grafana/dashboards
+    depends_on:
+      - db
+
+volumes:
+  db_data:

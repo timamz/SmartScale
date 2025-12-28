@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="420" viewBox="0 0 900 420">
+  <defs>
+    <style>
+      .box { fill: #f7f5f0; stroke: #333; stroke-width: 2; }
+      .title { font: 16px sans-serif; fill: #111; font-weight: bold; }
+      .label { font: 13px sans-serif; fill: #222; }
+      .arrow { stroke: #333; stroke-width: 2; marker-end: url(#arrowhead); }
+    </style>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#333" />
+    </marker>
+  </defs>
+
+  <rect class="box" x="30" y="40" width="180" height="70" rx="8" />
+  <text class="title" x="60" y="80">UI (Streamlit)</text>
+
+  <rect class="box" x="260" y="40" width="180" height="70" rx="8" />
+  <text class="title" x="295" y="80">API (FastAPI)</text>
+
+  <rect class="box" x="500" y="40" width="180" height="70" rx="8" />
+  <text class="title" x="535" y="70">Broker</text>
+  <text class="label" x="525" y="95">RabbitMQ</text>
+
+  <rect class="box" x="700" y="40" width="170" height="70" rx="8" />
+  <text class="title" x="735" y="80">Worker</text>
+
+  <rect class="box" x="260" y="180" width="200" height="80" rx="8" />
+  <text class="title" x="305" y="215">PostgreSQL</text>
+  <text class="label" x="290" y="240">requests, prices</text>
+
+  <rect class="box" x="520" y="180" width="180" height="80" rx="8" />
+  <text class="title" x="565" y="215">Grafana</text>
+  <text class="label" x="545" y="240">metrics dashboard</text>
+
+  <line class="arrow" x1="210" y1="75" x2="260" y2="75" />
+  <line class="arrow" x1="440" y1="75" x2="500" y2="75" />
+  <line class="arrow" x1="680" y1="75" x2="700" y2="75" />
+  <line class="arrow" x1="350" y1="110" x2="350" y2="180" />
+  <line class="arrow" x1="610" y1="110" x2="610" y2="180" />
+  <line class="arrow" x1="785" y1="110" x2="430" y2="180" />
+
+  <text class="label" x="110" y="120">upload + weight</text>
+  <text class="label" x="310" y="120">enqueue job</text>
+  <text class="label" x="560" y="120">consume</text>
+  <text class="label" x="360" y="170">store status</text>
+  <text class="label" x="620" y="170">read metrics</text>
+</svg>
