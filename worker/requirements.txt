@@ -1,0 +1,8 @@
+celery==5.3.6
+SQLAlchemy==2.0.30
+psycopg2-binary==2.9.9
+huggingface_hub==0.23.0
+numpy==1.26.4
+Pillow==10.3.0
+transformers==4.41.0
+pgvector==0.3.2
