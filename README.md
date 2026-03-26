@@ -23,7 +23,7 @@ SmartScale is a Visual RAG (Retrieval-Augmented Generation) system for produce r
 **Key components**:
 - **DINOv2** (facebook/dinov2-base) — self-supervised ViT for embedding images into 768-dim vectors
 - **pgvector** — PostgreSQL extension for vector similarity search (HNSW index, cosine distance)
-- **Reference DB** — 100+ fruits/vegetables, ~200 reference images with pre-computed embeddings
+- **Reference DB** — 100 fruits/vegetables, 300 reference images with pre-computed embeddings
 
 ## Quickstart
 
@@ -96,11 +96,6 @@ docker compose exec worker python /app/scripts/build_reference_db.py \
   --db-url postgresql+psycopg2://smartscale:smartscale@db:5432/smartscale
 ```
 
-### Download more images
-```bash
-python scripts/download_fruits.py --output-dir ./reference_data
-```
-
 ## Model hot reload
 The worker checks the `model_registry` table before each task. To switch models without restarting:
 
@@ -133,7 +128,7 @@ Grafana is pre-provisioned with a Postgres datasource and dashboard. Panels incl
 ## Technical details
 - **Embedding model**: DINOv2-base (768-dim, PyTorch, ~350MB)
 - **Vector search**: pgvector with HNSW index, cosine distance operator (`<=>`)
-- **Reference DB**: ~200 images across 100 produce categories
+- **Reference DB**: 300 images across 100 produce categories
 - **Async pipeline**: FastAPI → RabbitMQ → Celery worker → PostgreSQL
 - **Image serving**: FastAPI StaticFiles for reference images
 
